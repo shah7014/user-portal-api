@@ -1,5 +1,6 @@
 package com.learningbybuilding.supportportal.resource;
 
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user")
 public class UserResource {
     @GetMapping("/home")
-    public String showUser() {
-        return "Hello";
+    public String showUser() throws DisabledException{
+        throw new DisabledException("disble");
     }
 }

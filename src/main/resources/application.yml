@@ -10,3 +10,11 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
+#  mvc:
+#    throw-exception-if-no-handler-found: true
+#  web:
+#    resources:
+#      add-mappings: false
+
+jwt:
+  secret: secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecret
