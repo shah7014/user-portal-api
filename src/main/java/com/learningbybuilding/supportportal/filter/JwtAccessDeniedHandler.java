@@ -14,6 +14,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 
 @Component
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
@@ -24,6 +25,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
                 .reason(HttpStatus.UNAUTHORIZED.getReasonPhrase().toUpperCase())
                 .httpStatusCode(HttpStatus.UNAUTHORIZED.value())
                 .developerMessage(SecurityConstant.ACCESS_DENIED_MESSAGE)
+                .timeStamp(new Date())
                 .build();
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);

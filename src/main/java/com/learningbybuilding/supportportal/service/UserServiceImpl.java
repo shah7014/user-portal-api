@@ -28,10 +28,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         UserPrincipal userPrincipal;
 
         if (user == null) {
-            LOGGER.error("not exist in db user name:- " + username);
+            LOGGER.error("User not found by user name:- " + username);
             throw new UsernameNotFoundException("User name not found in db:- " + username);
         } else {
-            LOGGER.error("found user in db  for user name:- " + username);
+            LOGGER.info("found user in db for user name:- " + username);
             user.setLastLoginDateDisplay(user.getLastLoginDate());
             user.setLastLoginDate(new Date());
             userRepository.save(user);

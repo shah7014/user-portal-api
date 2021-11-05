@@ -13,6 +13,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 
 @Component
 public class JwtAuthenticationEntryPoint extends Http403ForbiddenEntryPoint {
@@ -24,6 +25,7 @@ public class JwtAuthenticationEntryPoint extends Http403ForbiddenEntryPoint {
                 .reason(HttpStatus.FORBIDDEN.getReasonPhrase().toUpperCase())
                 .httpStatusCode(HttpStatus.FORBIDDEN.value())
                 .developerMessage(SecurityConstant.FORBIDDEN_MESSAGE)
+                .timeStamp(new Date())
                 .build();
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);

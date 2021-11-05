@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserResource {
     @GetMapping("/home")
     public String showUser() throws DisabledException{
-        throw new DisabledException("disble");
+        return "app works";
     }
 }
