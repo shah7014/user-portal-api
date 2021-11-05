@@ -24,14 +24,14 @@ public class User {
     private String email;
     private String password;
     private String profileImageUrl;
-    //why 2 same things???
+
     private Date lastLoginDate;
     private Date lastLoginDateDisplay;
 
     private Date joinDate;
 
     //security related
-    private String[] roles;
+    private String role;
     private String[] authorities;
     private boolean isActive;
     private boolean isNotLocked;
