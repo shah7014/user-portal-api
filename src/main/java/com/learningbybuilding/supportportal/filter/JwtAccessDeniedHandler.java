@@ -24,7 +24,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
                 .httpStatus(HttpStatus.UNAUTHORIZED)
                 .reason(HttpStatus.UNAUTHORIZED.getReasonPhrase().toUpperCase())
                 .httpStatusCode(HttpStatus.UNAUTHORIZED.value())
-                .developerMessage(SecurityConstant.ACCESS_DENIED_MESSAGE)
+                .developerMessage(SecurityConstant.ACCESS_DENIED_MESSAGE + " from access denied handler")
                 .timeStamp(new Date())
                 .build();
 

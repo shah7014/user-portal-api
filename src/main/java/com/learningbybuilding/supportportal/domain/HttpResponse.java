@@ -1,6 +1,7 @@
 package com.learningbybuilding.supportportal.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +12,7 @@ import java.util.Date;
 @Builder
 @Data
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class HttpResponse {
     private int httpStatusCode;
     private HttpStatus httpStatus;

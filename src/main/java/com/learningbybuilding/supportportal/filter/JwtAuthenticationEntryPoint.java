@@ -24,7 +24,7 @@ public class JwtAuthenticationEntryPoint extends Http403ForbiddenEntryPoint {
                 .httpStatus(HttpStatus.FORBIDDEN)
                 .reason(HttpStatus.FORBIDDEN.getReasonPhrase().toUpperCase())
                 .httpStatusCode(HttpStatus.FORBIDDEN.value())
-                .developerMessage(SecurityConstant.FORBIDDEN_MESSAGE)
+                .developerMessage(SecurityConstant.FORBIDDEN_MESSAGE + " from entry point")
                 .timeStamp(new Date())
                 .build();
 
