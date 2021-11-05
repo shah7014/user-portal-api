@@ -13,3 +13,7 @@ spring:
 
 jwt:
   secret: secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecret
+
+server:
+  error:
+    path: /error

@@ -7,6 +7,7 @@ import com.learningbybuilding.supportportal.exception.domain.EmailNotFoundExcept
 import com.learningbybuilding.supportportal.exception.domain.UserNameExistException;
 import com.learningbybuilding.supportportal.exception.domain.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,7 +15,9 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.persistence.NoResultException;
 import java.io.IOException;
@@ -23,7 +26,7 @@ import java.util.Date;
 
 @RestControllerAdvice
 @Slf4j
-public class ExceptionHandling {
+public class ExceptionHandling implements ErrorController {
     public static final String ACCOUNT_LOCKED = "Your account has been locked. Please contact admin";
     public static final String METHOD_IS_NOT_ALLOWED = "This method is not allowed.";
     public static final String INTERNAL_SERVER_ERROR_MSG = "An error occurred while processing the request";
