@@ -62,7 +62,7 @@ public class JwtTokenProvider {
     }
 
     public Authentication getAuthentication(String userName,
-                                            List<SimpleGrantedAuthority> authorities,
+                                            List<GrantedAuthority> authorities,
                                             HttpServletRequest request) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(userName, authorities);
