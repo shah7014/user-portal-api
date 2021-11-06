@@ -1,5 +1,5 @@
 # user-portal-api
 
-# Creating simple user related apis
+# Creating user related apis
 
 # with jwt authorization
