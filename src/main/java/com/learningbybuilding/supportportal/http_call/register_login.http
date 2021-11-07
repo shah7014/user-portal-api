@@ -8,7 +8,7 @@ Content-Type: application/json
   "email": "tom@email.com"
 }
 
-###
+### password:- E6EwClsWOd
 POST http://localhost:8080/user/login
 Content-Type: application/json
 

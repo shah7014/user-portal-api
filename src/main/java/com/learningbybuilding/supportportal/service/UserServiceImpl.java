@@ -1,5 +1,6 @@
 package com.learningbybuilding.supportportal.service;
 
+import com.learningbybuilding.supportportal.cache.LoginAttemptCache;
 import com.learningbybuilding.supportportal.domain.User;
 import com.learningbybuilding.supportportal.domain.UserPrincipal;
 import com.learningbybuilding.supportportal.domain.UserRequest;
@@ -35,8 +36,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public static final String DEFAULT_USER_IMAGE_PATH = "/user/image/profile/temp";
 
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
+    private final LoginAttemptCache loginAttemptCache;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -47,12 +48,24 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             LOGGER.error("User not found by user name:- " + username);
             throw new UsernameNotFoundException("User name not found in db:- " + username);
         } else {
-            LOGGER.info("found user in db for user name:- " + username);
+            validateIsUserLocked(user);
             user.setLastLoginDateDisplay(user.getLastLoginDate());
             user.setLastLoginDate(new Date());
             userRepository.save(user);
             userPrincipal = new UserPrincipal(user);
             return userPrincipal;
+        }
+    }
+
+    private void validateIsUserLocked(User user) {
+        if (user.isNotLocked()) {
+            // validate if max failed attempt reached
+            if (loginAttemptCache.hasFailedAttemptsExceededMaxLimit(user.getUserName())) {
+                user.setNotLocked(false);
+            }
+        } else {
+            // if the account is locked just remove this user form cache
+            loginAttemptCache.evictUserFromLoginAttemptCache(user.getUserName());
         }
     }
 
