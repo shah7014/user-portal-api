@@ -65,7 +65,7 @@ public class JwtTokenProvider {
                                             List<GrantedAuthority> authorities,
                                             HttpServletRequest request) {
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(userName, authorities);
+                new UsernamePasswordAuthenticationToken(userName, null, authorities);
 
         //TODO - do we need this??
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

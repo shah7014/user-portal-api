@@ -3,7 +3,6 @@ package com.learningbybuilding.supportportal.listeners;
 import com.learningbybuilding.supportportal.cache.LoginAttemptCache;
 import com.learningbybuilding.supportportal.domain.UserPrincipal;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +13,7 @@ import org.springframework.security.authentication.event.AuthenticationSuccessEv
 @Slf4j
 public class LoginAttemptsListener {
     @Bean
-    public ApplicationListener<AuthenticationFailureBadCredentialsEvent> authenticationFailureBadCredentialsEventApplicationListener(LoginAttemptCache loginAttemptCache) {
+    public ApplicationListener<AuthenticationFailureBadCredentialsEvent> authenticationFailureListener(LoginAttemptCache loginAttemptCache) {
         return event -> {
             log.error("failure auth");
             Object principal = event.getAuthentication().getPrincipal();
@@ -27,14 +26,7 @@ public class LoginAttemptsListener {
     }
 
     @Bean
-    public ApplicationListener<ApplicationReadyEvent> onReady() {
-        return event -> {
-            log.info("app is ready");
-        };
-    }
-
-    @Bean
-    public ApplicationListener<AuthenticationSuccessEvent> authenticationSuccessEventApplicationListener(LoginAttemptCache loginAttemptCache) {
+    public ApplicationListener<AuthenticationSuccessEvent> authenticationSuccessListener(LoginAttemptCache loginAttemptCache) {
         return event -> {
             log.error("success auth");
             Object principal = event.getAuthentication().getPrincipal();

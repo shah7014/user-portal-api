@@ -1,12 +1,10 @@
 package com.learningbybuilding.supportportal.filter;
 
-import com.learningbybuilding.supportportal.constant.SecurityConstant;
 import com.learningbybuilding.supportportal.utility.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -17,7 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-import static com.learningbybuilding.supportportal.constant.SecurityConstant.*;
+import static com.learningbybuilding.supportportal.constant.SecurityConstant.OPTIONS_HTTP_METHOD;
+import static com.learningbybuilding.supportportal.constant.SecurityConstant.TOKEN_PREFIX;
 
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
