@@ -38,6 +38,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final LoginAttemptCache loginAttemptCache;
+    private final EmailService emailService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -90,6 +91,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .isNotLocked(true)
                 .build();
         userRepository.save(newUser);
+        // send password via email
+        emailService.sendEmail(newUser.getFirstName(), password, newUser.getEmail());
         LOGGER.info("newly generated user password is:- " + password);
         return newUser;
     }

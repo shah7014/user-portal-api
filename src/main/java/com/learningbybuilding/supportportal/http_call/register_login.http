@@ -2,10 +2,10 @@ POST http://localhost:8080/user/register
 Content-Type: application/json
 
 {
-  "firstName": "tom",
-  "lastName": "tommy",
-  "userName": "tom768",
-  "email": "tom@email.com"
+  "firstName": "John",
+  "lastName": "johnny_boy",
+  "userName": "johnny_boy",
+  "email": "rand-email"
 }
 
 ### password:- E6EwClsWOd
