@@ -2,6 +2,6 @@
 
 # Creating user related apis
 
-# with jwt authorization
+ a spring boot app with jwt authorization
 
-## locking account against brute force attack
+ locking account against brute force attack
