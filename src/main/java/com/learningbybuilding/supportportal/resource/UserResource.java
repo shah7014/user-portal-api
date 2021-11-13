@@ -117,7 +117,7 @@ public class UserResource {
     }
 
     // don't return void from controller send ResponseEntity with our domain class HttpResponse
-    @GetMapping("/resetPassword/{email}")
+    @GetMapping("/resetpassword/{email}")
     public ResponseEntity<HttpResponse> resetPassword(@PathVariable String email) throws EmailNotFoundException {
         userService.resetPassword(email);
         return response(OK, String.format(AN_EMAIL_WAS_SENT_TO_S_WITH_THE_NEW_PASSWORD, email));
