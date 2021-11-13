@@ -100,8 +100,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .isActive(true)
                 .isNotLocked(true)
                 .build();
-        userRepository.save(newUser);
-        // send password via email
+        // send password via email for new user
         emailService.sendEmail(newUser.getFirstName(), password, newUser.getEmail());
         LOGGER.info("newly generated user password is:- " + password);
         return newUser;

@@ -26,8 +26,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -122,7 +124,7 @@ public class UserResource {
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAuthority('user:delete')")
+    @PreAuthorize("hasAnyAuthority('user:delete')")
     public ResponseEntity<HttpResponse> delete(@PathVariable Long id) {
         userService.deleteUser(id);
         return response(NO_CONTENT, USER_DELETED_SUCCESSFULLY);
@@ -142,9 +144,21 @@ public class UserResource {
         return Files.readAllBytes(imagePath);
     }
 
-    //read image for robo hash website
+    //read image from robo hash website
     @GetMapping(path = "/image/profile/{userName}", produces = "image/jpeg")
-    public byte[] getDefaultProfileImage(@PathVariable String userName) {
+    public byte[] getDefaultProfileImage(@PathVariable String userName) throws IOException {
+        URL url = new URL(FileConstants.TEMP_PROFILE_IMAGE_BASE_URL + userName);
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        try(InputStream inputStream = url.openStream()) {
+            int bytesRead;
+            byte[] chunk = new byte[1024];
+
+            while((bytesRead = inputStream.read(chunk)) > 0) {
+                byteArrayOutputStream.write(chunk, 0, bytesRead);
+            }
+        }
+        return byteArrayOutputStream.toByteArray();
     }
 
     // this can't be used as we don't want to send image as an attachment to be downloaded
