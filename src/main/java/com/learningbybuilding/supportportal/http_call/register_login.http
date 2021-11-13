@@ -5,7 +5,7 @@ Content-Type: application/json
   "firstName": "John",
   "lastName": "johnny_boy",
   "userName": "johnny_boy",
-  "email": "rand-email"
+  "email": "random-email"
 }
 
 ### password:- E6EwClsWOd

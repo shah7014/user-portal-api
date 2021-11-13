@@ -8,6 +8,7 @@ import com.learningbybuilding.supportportal.exception.domain.UserNameExistExcept
 import com.learningbybuilding.supportportal.exception.domain.UserNotFoundException;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface UserService {
@@ -20,14 +21,14 @@ public interface UserService {
     User findByUserName(String userName);
 
     User addNewUser(String firstName, String lastName, String userName, String email,
-                    String role, boolean isNonLocked, boolean isActive, MultipartFile profileImage) throws UserNotFoundException, EmailExistException, UserNameExistException;
+                    String role, boolean isNonLocked, boolean isActive, MultipartFile profileImage) throws UserNotFoundException, EmailExistException, UserNameExistException, IOException;
 
     User updateUser(String currentUserName, String newFirstName, String newLastName, String newUserName, String newEmail,
-                    String role, boolean isNonLocked, boolean isActive, MultipartFile profileImage) throws UserNotFoundException, EmailExistException, UserNameExistException;
+                    String role, boolean isNonLocked, boolean isActive, MultipartFile profileImage) throws UserNotFoundException, EmailExistException, UserNameExistException, IOException;
 
     void deleteUser(long id);
 
     void resetPassword(String email) throws EmailNotFoundException;
 
-    User updateProfileImage(String userName, MultipartFile profileImage) throws UserNotFoundException;
+    User updateProfileImage(String userName, MultipartFile profileImage) throws UserNotFoundException, IOException;
 }

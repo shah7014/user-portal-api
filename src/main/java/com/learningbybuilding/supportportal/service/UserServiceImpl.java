@@ -32,6 +32,9 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 
+import static com.learningbybuilding.supportportal.constant.FileConstants.*;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -40,7 +43,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public static final String USER_NAME_ALREADY_EXISTS = "Requested user name already present in records";
     public static final String EMAIL_ALREADY_EXISTS = "Requested email already present in records";
     public static final String NO_USER_BY_USERNAME = "User with %s user name not found in records";
-    public static final String DEFAULT_USER_IMAGE_PATH = "/user/image/profile/temp";
     private static final String NO_USER_FOUND_BY_EMAIL = "no user found for email %s";
 
     private final UserRepository userRepository;
@@ -121,7 +123,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User addNewUser(String firstName, String lastName, String userName, String email, String role, boolean isNonLocked, boolean isActive, MultipartFile profileImage) throws UserNotFoundException, EmailExistException, UserNameExistException {
+    public User addNewUser(String firstName, String lastName, String userName, String email, String role, boolean isNonLocked, boolean isActive, MultipartFile profileImage) throws UserNotFoundException, EmailExistException, UserNameExistException, IOException {
         validateUserNameAndEmail(null, userName, email);
         String password = generatePassword();
         String userId = generateUserId();
@@ -148,7 +150,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User updateUser(String currentUserName, String newFirstName, String newLastName, String newUserName, String newEmail, String role, boolean isNonLocked, boolean isActive, MultipartFile profileImage) throws UserNotFoundException, EmailExistException, UserNameExistException {
+    public User updateUser(String currentUserName, String newFirstName, String newLastName, String newUserName, String newEmail, String role, boolean isNonLocked, boolean isActive, MultipartFile profileImage) throws UserNotFoundException, EmailExistException, UserNameExistException, IOException {
         User currentUser = validateUserNameAndEmail(currentUserName, newUserName, newEmail);
         currentUser.setFirstName(newFirstName);
         currentUser.setLastName(newLastName);
@@ -157,8 +159,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         currentUser.setActive(isActive);
         currentUser.setNotLocked(isNonLocked);
         currentUser.setRole(getRole(role).toString());
-
-        // TODO authorities should also be set
+        currentUser.setAuthorities(getRole(role).getAuthorities());
 
         userRepository.save(currentUser);
         saveProfileImage(currentUser, profileImage);
@@ -183,7 +184,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User updateProfileImage(String userName, MultipartFile profileImage) throws UserNotFoundException {
+    public User updateProfileImage(String userName, MultipartFile profileImage) throws UserNotFoundException, IOException {
         User user = userRepository.findByEmail(userName);
         if (user == null) {
             throw new UserNotFoundException(String.format(NO_USER_BY_USERNAME, userName));
@@ -229,6 +230,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     private String generateTempImageUrl(String userName) {
+        //TODO we need to use robots url here but we will do this in our controller mapped with this mapping
+        // and them go to robots url from our controller
         return ServletUriComponentsBuilder.fromCurrentContextPath().path(FileConstants.DEFAULT_USER_IMAGE_PATH + userName).toUriString();
     }
 
@@ -241,33 +244,28 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     private void saveProfileImage(User user, MultipartFile profileImage) throws IOException {
-        String fileName = org.springframework.util.StringUtils.cleanPath(profileImage.getOriginalFilename());
-        Path path = Paths.get(FileConstants.USER_FOLDER + fileName);
-        Files.copy(profileImage.getInputStream(), path);
-        String imagePath = ServletUriComponentsBuilder.fromCurrentContextPath().path(FileConstants.USER_IMAGE_PATH).path(fileName).toUriString();
-        user.setProfileImageUrl(imagePath);
-        userRepository.save(user);
-    }
+        if (profileImage != null) {
 
-    //TODO should use this for robots image why doing generateTempImage???
-    private String getTemporaryProfileImageUrl(String userName) {
-        return FileConstants.TEMP_PROFILE_IMAGE_BASE_URL + "/" + userName;
+            Path userDirectory = Paths.get(USER_FOLDER + user.getUserName()).toAbsolutePath().normalize();
+
+            if (!Files.exists(userDirectory)) {
+                Files.createDirectories(userDirectory);
+                LOGGER.info(DIRECTORY_CREATED);
+            }
+
+            Path imagePath = userDirectory.resolve(user.getUserName() + DOT + JPG_EXTENSION);
+            Files.copy(profileImage.getInputStream(), imagePath, REPLACE_EXISTING);
+
+            // TODO can we use .path instead of forward slash??
+            String imageUrl = ServletUriComponentsBuilder
+                    .fromCurrentContextPath().path(USER_IMAGE_PATH + user.getUserName() + FORWARD_SLASH + user.getUserName() + DOT + JPG_EXTENSION).toUriString();
+            user.setProfileImageUrl(imageUrl);
+            userRepository.save(user);
+
+        }
     }
 
     private UserRole getRole(String role) {
-        switch (role.toLowerCase()) {
-            case "user":
-                return UserRole.ROLE_USER;
-            case "hr":
-                return UserRole.ROLE_HR;
-            case "manager":
-                return UserRole.ROLE_MANAGER;
-            case "admin":
-                return UserRole.ROLE_ADMIN;
-            case "superadmin":
-                return UserRole.ROLE_SUPER_ADMIN;
-            default:
-                return UserRole.ROLE_USER
-        }
+        return UserRole.valueOf(role.toUpperCase());
     }
 }
