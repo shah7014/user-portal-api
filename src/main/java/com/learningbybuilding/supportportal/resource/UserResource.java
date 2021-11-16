@@ -44,6 +44,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
+@CrossOrigin(value = "http://localhost:4200", exposedHeaders = "Jwt-Token")
 public class UserResource {
     public static final String AN_EMAIL_WAS_SENT_TO_S_WITH_THE_NEW_PASSWORD = "An email was sent to %s with the new password";
     public static final String USER_DELETED_SUCCESSFULLY = "User deleted successfully";

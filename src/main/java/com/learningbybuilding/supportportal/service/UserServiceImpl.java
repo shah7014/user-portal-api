@@ -103,6 +103,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         // send password via email for new user
         emailService.sendEmail(newUser.getFirstName(), password, newUser.getEmail());
         LOGGER.info("newly generated user password is:- " + password);
+        userRepository.save(newUser);
         return newUser;
     }
 

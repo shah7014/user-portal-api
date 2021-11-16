@@ -22,7 +22,7 @@ public class EmailService {
         mailMessage.setSubject("New Registration For Support Portal");
         mailMessage.setText("Hello " + firstName + ",\n\n" + "Your password is:- " + password + "\n\n" + "Regards,\n Support Portal Team");
 
-        mailSender.send(mailMessage);
+        //mailSender.send(mailMessage);
     }
 
 }
